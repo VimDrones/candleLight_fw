@@ -40,11 +40,11 @@ THE SOFTWARE.
 /* Define these here so they can be referenced in other files */
 
 #define GS_CAN_EP0_BUF_SIZE \
-	max5(sizeof(struct gs_host_config), \
-		 sizeof(struct gs_device_bittiming), \
-		 sizeof(struct gs_device_mode), \
-		 sizeof(struct gs_identify_mode), \
-		 sizeof(struct gs_device_termination_state))
+		max5(sizeof(struct gs_host_config), \
+			 sizeof(struct gs_device_bittiming), \
+			 sizeof(struct gs_device_mode), \
+			 sizeof(struct gs_identify_mode), \
+			 sizeof(struct gs_device_termination_state))
 #ifdef CONFIG_CANFD
 #define CAN_DATA_MAX_PACKET_SIZE 64    /* Endpoint IN & OUT Packet size */
 #else
@@ -105,6 +105,9 @@ typedef struct {
 // RX FIFO size chosen according to reference manual RM0368 which suggests
 // using (largest packet size / 4) + 1
 # define USB_RX_FIFO_SIZE ((256U / 4U) + 1U)
+#elif defined(STM32G0)
+# define USB_INTERFACE	  USB_DRD_FS
+# define USB_INTERRUPT	  USB_UCPD1_2_IRQn
 #endif
 
 uint8_t USBD_GS_CAN_Init(USBD_GS_CAN_HandleTypeDef *hcan, USBD_HandleTypeDef *pdev);

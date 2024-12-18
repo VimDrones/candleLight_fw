@@ -2,20 +2,20 @@
 [![Build](https://github.com/candle-usb/candleLight_fw/actions/workflows/ci.yml/badge.svg)](https://github.com/candle-usb/candleLight_fw/actions)
 
 This is firmware for certain STM32F042x/STM32F072xB-based USB-CAN adapters, notably:
-- candleLight: https://github.com/HubertD/candleLight (STM32F072xB)
-- candleLight FD: https://linux-automation.com/en/products/candlelight-fd.html (STM32G0B1CBT)
-- candleLight: https://www.linux-automation.com/en/products/candlelight.html (STM32F072xB)
-- cantact: https://www.linklayer.com/tools (STM32F042C6)
-- canable (cantact clone): http://canable.io/ (STM32F042C6)
-- USB2CAN: https://github.com/roboterclubaachen/usb2can (STM32F042x6)
-- CANAlyze: https://kkuchera.github.io/canalyze/ (STM32F042C6)
-- VulCAN Gen1: https://shop.copperforge.cc/products/ac41 (STM32F042x6)
-- Entreé: https://github.com/tuna-f1sh/entree (STM32F042x6)
-- CANable-MKS: https://github.com/makerbase-mks/CANable-MKS (STM32F072xB)
-- ConvertDevice-xCAN: https://github.com/ConvertDevice/xCAN (STM32F072xB)
-- ConvertDevice-xCANFD: https://github.com/ConvertDevice/xCANFD (STM32G0B1CBT6)
-- DSD TECH SH-C30A: https://www.deshide.com/product-details.html?pid=384242&_t=1671089557 (STM32F072xB)
-- FYSETC UCAN: https://www.fysetc.com/products/fysetc-ucan-board-based-on-stm32f072-usb-to-can-adapter-support-with-canable-candlelight-klipper-firmware (STM32F072xB)
+- candleLight: <https://github.com/HubertD/candleLight> (STM32F072xB)
+- candleLight FD: <https://linux-automation.com/en/products/candlelight-fd.html> (STM32G0B1CBT)
+- candleLight: <https://www.linux-automation.com/en/products/candlelight.html> (STM32F072xB)
+- cantact: <https://www.linklayer.com/tools> (STM32F042C6)
+- canable (cantact clone): <http://canable.io/> (STM32F042C6)
+- USB2CAN: <https://github.com/roboterclubaachen/usb2can> (STM32F042x6)
+- CANAlyze: <https://kkuchera.github.io/canalyze/> (STM32F042C6)
+- VulCAN Gen1: <https://shop.copperforge.cc/products/ac41> (STM32F042x6)
+- Entreé: <https://github.com/tuna-f1sh/entree> (STM32F042x6)
+- CANable-MKS 1.0: <https://github.com/makerbase-mks/CANable-MKS> (STM32F072xB)
+- ConvertDevice-xCAN: <https://github.com/ConvertDevice/xCAN> (STM32F072xB)
+- ConvertDevice-xCANFD: <https://github.com/ConvertDevice/xCANFD> (STM32G0B1CBT6)
+- DSD TECH SH-C30A: <https://www.deshide.com/product-details.html?pid=384242&_t=1671089557> (STM32F072xB)
+- FYSETC UCAN: <https://www.fysetc.com/products/fysetc-ucan-board-based-on-stm32f072-usb-to-can-adapter-support-with-canable-candlelight-klipper-firmware> (STM32F072xB)
 
 Of important note is that the common STM32F103 will NOT work with this firmware because its hardware cannot use both USB and CAN simultaneously.
 Beware also the smaller packages in the F042 series which map a USB and CAN_TX signal on the same pin and are therefore unusable !
@@ -29,6 +29,10 @@ STM32G0B1-based devices are not yet supported by the mainline
 firmware. Support for these devices is discussed in
 https://github.com/candle-usb/candleLight_fw/pull/139 and
 https://github.com/candle-usb/candleLight_fw/pull/176.
+
+STM32G431-based devices (e.g. CANable-MKS 2.0) are not yet supported.
+
+Currently, the firmware sends back an echo frame to the host when the frame is written to the CAN peripheral, and not when the frame is actually sent successfully on the bus. This affects timestamps, one-shot mode, and other edge cases.
 
 ## Known issues
 
@@ -135,9 +139,7 @@ Name=cannette99
 - We include both a `.editorconfig` and `uncrustify.cfg` which should help with whitespace.
 
 Typical command to run uncrustify on all source files (ignoring HAL and third-party libs):
-`uncrustify -c ./uncrustify.cfg --replace $(find include src -name "*.[ch]")`
-
-Optionally append `--no-backup` to avoid creating .orig files.
+`uncrustify -c ./uncrustify.cfg --replace --no-backup $(find include src -name "*.[ch]")`
 
 ### Profiling
 Not great on cortex-M0 cores (F042, F072 targets etc) since they lack hardware support (ITM and SWO). However, it's possible to randomly sample the program counter and get some coarse profiling info.
